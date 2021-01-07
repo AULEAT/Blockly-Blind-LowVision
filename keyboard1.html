@@ -168,7 +168,12 @@ function onConnections(event) {
         }
         if (astNode.getType() == Blockly.ASTNode.types.FIELD) {
             var field = astNode.getLocation();
+            if (field.getText() == '≤'){
+                responsiveVoice.speak('lesser than or equal to')
+            }
+            else {
             responsiveVoice.speak(field.getText());
+            }
         }
 
         if (astNode.getType() == Blockly.ASTNode.types.NEXT) {
