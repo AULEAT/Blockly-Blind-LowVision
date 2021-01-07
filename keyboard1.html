@@ -168,12 +168,8 @@ function onConnections(event) {
         }
         if (astNode.getType() == Blockly.ASTNode.types.FIELD) {
             var field = astNode.getLocation();
-            if (field.getText() == '≤'){
-                responsiveVoice.speak('lesser than or equal to')
-            }
-            else {
-            responsiveVoice.speak(field.getText());
-            }
+            var speak = new SpeechSynthesisUtterance(field.getText())
+            window.speechSynthesis.speak(speak);
         }
 
         if (astNode.getType() == Blockly.ASTNode.types.NEXT) {
