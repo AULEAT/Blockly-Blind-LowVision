@@ -1,0 +1,243 @@
+<script src="blockly_compressed.js"></script>
+<script src="blocks_compressed.js"></script>
+<script src="line_cursor.js"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=6GSHtR3M"></script>
+
+<script src="msg/js/en.js"></script>
+
+<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Logic" categorystyle="logic_category">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null" disabled="true"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops" categorystyle="loop_category">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math" categorystyle="math_category">
+      <block type="math_number" gap="32">
+        <field name="NUM">123</field>
+      </block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Text" categorystyle="text_category">
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE"></category>
+  </xml>
+
+<script>
+   var blocks = {"controls_if": "if else block", "controls_repeat_ext": 'repeat block', "logic_compare": 'logic compare block', "logic_operation" : 'logic operation block', "logic_negate": 'logic negate block', "logic_boolean": 'logic boolean block', "math_number": 'number block', "math_arithmetic": 'arithmetic block', "text": 'text block', "text_print": 'print block', 'controls_whileUntil': 'repeat while or until block', 'variables_set': 'set variable', 'controls_for':'FOR loop block', 'controls_forEach': 'FOR each block', 'controls_flow_statements': 'flow statements block', 'math_change': 'change variable', 'variables_get': 'get variable'}
+  var workspace = Blockly.inject('blocklyDiv',
+      {toolbox: document.getElementById('toolbox'),
+       trashcan: true});
+  var flyoutWorkspace = workspace.getFlyout().getWorkspace();
+  Blockly.navigation.enableKeyboardAccessibility();
+  var markerManager = Blockly.getMainWorkspace().getMarkerManager();
+  var toolboxMarkerManager = flyoutWorkspace.getMarkerManager();
+  //toolboxMarkerManager.setCursor(new Blockly.LineCursor());
+  Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+  markerManager.setCursor(new Blockly.LineCursor());
+  //shows tooltip
+  var ctrlT = Blockly.user.keyMap.createSerializedKey(
+  Blockly.utils.KeyCodes.T, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+  var actionTooltip = new Blockly.Action('tooltip', 'displays tooltip');
+  Blockly.user.keyMap.setActionForKey(ctrlT, actionTooltip);
+  //block info
+  var ctrlI = Blockly.user.keyMap.createSerializedKey(
+  Blockly.utils.KeyCodes.I, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+  var actionInfo = new Blockly.Action('info', 'displays info');
+  Blockly.user.keyMap.setActionForKey(ctrlI, actionInfo);
+  //delete block
+  var deleteInfo = new Blockly.Action('delete', 'deletes block');
+  Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.DELETE] = new Blockly.Action('delete', 'deletes block');
+  Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.BACKSPACE] = new Blockly.Action('delete', 'deletes block');
+  var xml = '<xml><variables><variable id="~4s+3638:l^@^3}iZgo*">count</variable></variables><block type="variables_set" id="Hocs(Bmp8{!0O65Z8{%@" x="10" y="10"><field name="VAR" id="~4s+3638:l^@^3}iZgo*">count</field> <value name="VALUE"><block type="math_number" id="`TSx{[+`tQx0{b~A~gr_"><field name="NUM">1</field> </block></value><next><block type="controls_whileUntil" id="KYd|jsL%RE{Rdi(}5j)="><field name="MODE">WHILE</field><value name="BOOL"><block type="logic_compare" id="-A0%J0LOb9Oof`#`XF^d"> <field name="OP">LTE</field><value name="A"><block type="variables_get" id="+)L,YJTXN:|MTT^o?d)u"><field name="VAR" id="~4s+3638:l^@^3}iZgo*">count</field></block></value><value name="B"><block type="math_number" id="s6%50?wh-RC9mSV7E4zC"> <field name="NUM">3</field></block></value></block></value><statement name="DO"><block type="text_print" id="/gWpp?_TyXmT,`c3X-O]"><value name="TEXT"><shadow type="text" id="mtZTaQC:$L.^$^T6!Kjb"><field name="TEXT">Hello World</field></shadow></value></block> </statement><next><block type="variables_set" id="9g4Y`W^H-T(J%xo]eT0}"><field name="VAR" id="~4s+3638:l^@^3}iZgo*">count</field><value name="VALUE"> <block type="math_arithmetic" id="iX-Y#]Vt`(hSMgfwo0*|"><field name="OP">ADD</field><value name="A"><shadow type="math_number"><field name="NUM">1</field></shadow><block type="variables_get" id="f]vo!BX,kyZ~Z@/EEwjX"><field name="VAR" id="~4s+3638:l^@^3}iZgo*">count</field></block></value><value name="B"><shadow type="math_number" id="A!oLk51O+L(m.nXKkq=n"><field name="NUM">1</field> </shadow></value></block></value></block></next></block></next></block></xml>'
+  Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+  //Blockly.user.keyMap.setActionForKey(Blockly.utils.KeyCodes.DELETE , deleteInfo);
+//add for first block block connection
+//toolbox events 
+//create variable    
+function onConnections(event) {
+      var myAudio = document.createElement('audio');
+      myAudio.crossOrigin = "anonymous";
+      myAudio.src = "media/click.mp3";
+      console.log(event);
+      var blockid = event.blockId;
+      var blockname = workspace.getBlockById(blockid);
+      if (event.type == Blockly.Events.UI && event.element == "category") { 
+         var category = event.newValue;
+         responsiveVoice.speak(category);
+      }
+      if (event.type == Blockly.Events.UI && event.element == "cursorMove") {
+        var astNode = event.newValue;
+        var oldNode = event.oldValue;
+        if (astNode.getType() == Blockly.ASTNode.types.BLOCK) {
+            //document.dispatchEvent(new KeyboardEvent("keydown", {
+            //keyCode: 84}))
+            var field = astNode.getLocation();
+            var speak2 = new SpeechSynthesisUtterance(blocks[blockname.type] + '   ' + 'block connection');
+            if (blockname == blockname.getTopStackBlock() && blockname.getSurroundParent() != null){
+                console.log(blockname.getTopStackBlock());
+                var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                var source = audioCtx.createMediaElementSource(myAudio);
+                var panNode = audioCtx.createStereoPanner();
+                panNode.pan.value = -1;
+                source.connect(panNode);
+                panNode.connect(audioCtx.destination);
+                myAudio.play();
+                setTimeout(() => window.speechSynthesis.speak(speak2), 500); 
+            }
+            else {
+                window.speechSynthesis.speak(speak2)
+            }
+        }
+        if (astNode.getType() == Blockly.ASTNode.types.INPUT) {
+            if (astNode.getLocation().getParentInput().name == 'DO0'){
+                responsiveVoice.speak('Do connection');
+            }
+            else if (astNode.getLocation().getParentInput().name == 'IF0'){
+                responsiveVoice.speak('If connection');
+            }
+            else if (astNode.getLocation().getParentInput().name == 'TIMES'){
+                responsiveVoice.speak('BLANK');
+            }
+            else if (astNode.getLocation().getParentInput().name == 'A' ){
+                responsiveVoice.speak('left operand');
+            }
+            else if (astNode.getLocation().getParentInput().name == 'B'){
+                responsiveVoice.speak('right operand');
+            }
+            else if( astNode.getLocation().getParentInput().name == 'BOOL' || astNode.getLocation().getParentInput().name == 'TEXT' || astNode.getLocation().getParentInput().name == 'VALUE'){
+                responsiveVoice.speak('input connection');
+            }
+            else {
+            responsiveVoice.speak(astNode.getLocation().getParentInput().name);
+            }
+            
+        }
+        if (astNode.getType() == Blockly.ASTNode.types.FIELD) {
+            var field = astNode.getLocation();
+            responsiveVoice.speak(field.getText());
+        }
+
+        if (astNode.getType() == Blockly.ASTNode.types.NEXT) {
+            var field = astNode.getLocation();
+            var speak = blocks[blockname.type] + ' ' + ' bottom connection';
+            if (blockname.getNextBlock() == null && blockname.getSurroundParent() != null){
+                var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                var source = audioCtx.createMediaElementSource(myAudio);
+                var panNode = audioCtx.createStereoPanner();
+                panNode.pan.value = 1;
+                source.connect(panNode);
+                panNode.connect(audioCtx.destination);
+                myAudio.play();
+                setTimeout(() => responsiveVoice.speak(speak), 500); 
+            }
+            else {
+                responsiveVoice.speak(speak)
+            }
+        }          
+      }
+     
+      if (event.type == Blockly.Events.UI && event.element == "markerMove" && event.oldValue != event.newValue) {
+          window.speechSynthesis.speak(new SpeechSynthesisUtterance('connection marked'));
+      }
+      if (event.element == 'fieldMove') {
+        var newHighlightedValue = event.newValue;
+        responsiveVoice.speak(newHighlightedValue);
+      }
+    
+      if (event.element == 'buttonFocused') {
+          responsiveVoice.speak("Create variable");
+      }
+    
+}
+//workspace.addChangeListener(onFirstComment);
+function onConnections1(event) {
+      
+      var blockid = event.blockId;
+      var blockname = flyoutWorkspace.getBlockById(blockid);
+      if (event.type == Blockly.Events.UI && event.element == "cursorMove") {
+          var astNode = event.newValue;
+          if (astNode.getType() == Blockly.ASTNode.types.STACK) {
+            //window.speechSynthesis.speak(new SpeechSynthesisUtterance(blockname.type))
+            console.log(blockname, "hi");
+            responsiveVoice.speak(blocks[blockname.type]);
+        }
+      }
+}
+
+function onConnections2(event) {
+      var blockid = event.blockId;
+      var blockname = workspace.getBlockById(blockid);
+      var strings = '';
+      var a;
+      var speak2;
+      if (event.type == Blockly.Events.BLOCK_MOVE) {
+        var movedBlock = workspace.getBlockById(event.blockId);
+        var blockParent = workspace.getBlockById(event.newParentId);
+        if (movedBlock != null && blockParent != null){
+            //responsiveVoice.speak(movedBlock.type + 'connected' + 'to' + blockParent.type);
+            speak3 = new SpeechSynthesisUtterance(blocks[movedBlock.type] + '  ' + 'connected to' + '  ' + blocks[blockParent.type])
+            console.log(speak3);
+            window.speechSynthesis.speak(speak3);
+        }
+      }
+      
+      
+}
+workspace.addChangeListener(onConnections2);
+workspace.addChangeListener(onConnections);
+flyoutWorkspace.addChangeListener(onConnections1);
+</script>
