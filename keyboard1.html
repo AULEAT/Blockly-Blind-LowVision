@@ -168,8 +168,7 @@ function onConnections(event) {
         }
         if (astNode.getType() == Blockly.ASTNode.types.FIELD) {
             var field = astNode.getLocation();
-            var speak = new SpeechSynthesisUtterance(field.getText())
-            window.speechSynthesis.speak(speak);
+            responsiveVoice.speak(field.getText());
         }
 
         if (astNode.getType() == Blockly.ASTNode.types.NEXT) {
