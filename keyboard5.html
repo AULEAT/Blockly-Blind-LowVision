@@ -14,6 +14,8 @@
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
+      <block type="logic_null" disabled="true"></block>
+      <block type="logic_ternary"></block>
     </category>
     <category name="Loops" categorystyle="loop_category">
       <block type="controls_repeat_ext">
@@ -75,11 +77,10 @@
   </xml>
 
 <script>
-  var blocks = {"controls_if": "if else block", "controls_repeat_ext": 'repeat block', "logic_compare": 'logic compare block', "logic_operation" : 'logic operation block', "logic_negate": 'logic negate block', "logic_boolean": 'logic boolean block', "math_number": 'number block', "math_arithmetic": 'arithmetic block', "text": 'text block', "text_print": 'print block', 'controls_whileUntil': 'repeat while or until block', 'variables_set': 'set variable', 'controls_for':'FOR loop block', 'controls_forEach': 'FOR each block', 'controls_flow_statements': 'flow statements block', 'math_change': 'change variable', 'variables_get': 'get variable'}
+   var blocks = {"controls_if": "if else block", "controls_repeat_ext": 'repeat block', "logic_compare": 'logic compare block', "logic_operation" : 'logic operation block', "logic_negate": 'logic negate block', "logic_boolean": 'logic boolean block', "math_number": 'number block', "math_arithmetic": 'arithmetic block', "text": 'text block', "text_print": 'print block', 'controls_whileUntil': 'repeat while or until block', 'variables_set': 'set variable', 'controls_for':'FOR loop block', 'controls_forEach': 'FOR each block', 'controls_flow_statements': 'flow statements block', 'math_change': 'change variable', 'variables_get': 'get variable'}
   var workspace = Blockly.inject('blocklyDiv',
       {toolbox: document.getElementById('toolbox'),
        trashcan: true});
-  Blockly.navigation.enableKeyboardAccessibility();
   var flyoutWorkspace = workspace.getFlyout().getWorkspace();
   Blockly.navigation.enableKeyboardAccessibility();
   var markerManager = Blockly.getMainWorkspace().getMarkerManager();
@@ -101,6 +102,8 @@
   var deleteInfo = new Blockly.Action('delete', 'deletes block');
   Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.DELETE] = new Blockly.Action('delete', 'deletes block');
   Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.BACKSPACE] = new Blockly.Action('delete', 'deletes block');
+  var xml = '<xml><variables><variable id="~4s+3638:l^@^3}iZgo*">count</variable></variables><block type="variables_set" id="Hocs(Bmp8{!0O65Z8{%@" x="10" y="10"><field name="VAR" id="~4s+3638:l^@^3}iZgo*">count</field><value name="VALUE"><block type="math_number" id="`TSx{[+`tQx0{b~A~gr_"><field name="NUM">5</field></block></value><next><block type="controls_repeat_ext" id="Rd$68o=a]C9k=30Qys_u"><value name="TIMES"><shadow xmlns="" type="math_number" id="PFWxx5.%Fwa}*Kws@kD6"><field name="NUM">10</field></shadow><block type="variables_get" id="_nnoZl{4=oAx0{(-xP23"><field name="VAR" id="~4s+3638:l^@^3}iZgo*">count</field></block></value><statement name="DO"> <block type="text_print" id="x`wA7J24{?9Z0dW-3/Qp"><value name="TEXT"><shadow type="text" id="(SfsWI]:oA.**k:t3Abl"><field name="TEXT">Hello World</field></shadow></value></block></statement></block></next></block></xml>'
+  Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
   //Blockly.user.keyMap.setActionForKey(Blockly.utils.KeyCodes.DELETE , deleteInfo);
 //add for first block block connection
 //toolbox events 
@@ -112,7 +115,6 @@ function onConnections(event) {
       console.log(event);
       var blockid = event.blockId;
       var blockname = workspace.getBlockById(blockid);
-      //console.log(blockname.type);
       if (event.type == Blockly.Events.UI && event.element == "category") { 
          var category = event.newValue;
          responsiveVoice.speak(category);
@@ -121,14 +123,6 @@ function onConnections(event) {
         var astNode = event.newValue;
         var oldNode = event.oldValue;
         if (astNode.getType() == Blockly.ASTNode.types.BLOCK) {
-            //var commands = {
-                //'toolbox': function() {
-                  //document.dispatchEvent(new KeyboardEvent("keydown", {
-            //keyCode: 84}))
-                //}
-              //};
-            //annyang.addCommands(commands);
-            //annyang.start();
             //document.dispatchEvent(new KeyboardEvent("keydown", {
             //keyCode: 84}))
             var field = astNode.getLocation();
@@ -158,7 +152,7 @@ function onConnections(event) {
             else if (astNode.getLocation().getParentInput().name == 'TIMES'){
                 responsiveVoice.speak('BLANK');
             }
-            else if (astNode.getLocation().getParentInput().name == 'A'){
+            else if (astNode.getLocation().getParentInput().name == 'A' ){
                 responsiveVoice.speak('left operand');
             }
             else if (astNode.getLocation().getParentInput().name == 'B'){
@@ -174,12 +168,7 @@ function onConnections(event) {
         }
         if (astNode.getType() == Blockly.ASTNode.types.FIELD) {
             var field = astNode.getLocation();
-            if (field.getText() == '≤'){
-                responsiveVoice.speak('lesser than or equal to')
-            }
-            else {
             responsiveVoice.speak(field.getText());
-            }
         }
 
         if (astNode.getType() == Blockly.ASTNode.types.NEXT) {
@@ -223,7 +212,7 @@ function onConnections1(event) {
           var astNode = event.newValue;
           if (astNode.getType() == Blockly.ASTNode.types.STACK) {
             //window.speechSynthesis.speak(new SpeechSynthesisUtterance(blockname.type))
-            console.log(blockname.type, "hi");
+            console.log(blockname, "hi");
             responsiveVoice.speak(blocks[blockname.type]);
         }
       }
@@ -248,19 +237,6 @@ function onConnections2(event) {
       
       
 }
-
-function getAlert() {
-
-  // get all scripts
-  var elem = document.scripts;
-
-  // loop and check
-  for (var i = 0, len = elem.length; i < len; i++) {
-
-    var txt = elem[i].textContent.match(/alert\(['"]([^'"]+)['"]\)/);
-    if (txt) { return txt[1]; } // if matched, return the alert text and stop
-  }
-} 
 workspace.addChangeListener(onConnections2);
 workspace.addChangeListener(onConnections);
 flyoutWorkspace.addChangeListener(onConnections1);
