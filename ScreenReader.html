@@ -1,6 +1,6 @@
 <script src="blockly_compressed.js"></script>
 <script src="blocks_compressed.js"></script>
-<script src="line_cursor.js"></script>
+<script src="line_cursor1.js"></script>
 <script src="msg/js/en.js"></script>
 
 <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
@@ -115,12 +115,10 @@ function onConnections(event) {
       console.log(blockname)
       if (event.type == Blockly.Events.UI && event.element == "category") {
          currentValue = event.newValue;
-         //window.speechSynthesis.cancel();
          var category = event.newValue;
          if (category != null){
             var screenReader = document.getElementById("screenReader");
             screenReader.innerHTML = category
-            //window.speechSynthesis.speak(new SpeechSynthesisUtterance(category))
          }
       }
       if (event.type == Blockly.Events.UI && event.element == "cursorMove") {
@@ -128,7 +126,8 @@ function onConnections(event) {
         var oldNode = event.oldValue;
         if (astNode.getType() == Blockly.ASTNode.types.BLOCK) {
             var screenReader = document.getElementById("screenReader");
-            screenReader.innerHTML = blocks[blockname.type] + '   ' + 'block connection' + ' ' + a
+            screenReader.innerHTML = blocks[blockname.type] + '   ' + 'block connection' + ' ' 
+            a = blocks[blockname.type] + '   ' + 'block connection' + ' '
             var field = astNode.getLocation();
             var speak2 = new SpeechSynthesisUtterance(blocks[blockname.type] + '   ' + 'block connection');
             if (blockname == blockname.getTopStackBlock() && blockname.getSurroundParent() != null & blockname.statementInputCount > 0){
@@ -140,59 +139,36 @@ function onConnections(event) {
                 source.connect(panNode);
                 panNode.connect(audioCtx.destination);
                 myAudio.play();
-                //setTimeout(() => window.speechSynthesis.speak(speak2), 500); 
             }
-            else{ 
-                if (window.speechSynthesis.speaking) {
-                //setTimeout(() => window.speechSynthesis.speak(speak2), 100); 
-            }
-                else {
-                //window.speechSynthesis.speak(speak2); 
-            }
-                }
         }
         if (astNode.getType() == Blockly.ASTNode.types.INPUT) {
             if (astNode.getLocation().getParentInput().name == 'DO0'){
                 var screenReader = document.getElementById("screenReader");
                 screenReader.innerHTML = 'Do connection';
-                //window.speechSynthesis.cancel();
-                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("Do connection"))
             }
             else if (astNode.getLocation().getParentInput().name == 'IF0'){
                 var screenReader = document.getElementById("screenReader");
                 screenReader.innerHTML = 'If connection';
-                //window.speechSynthesis.cancel();
-                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("If connection"))
             }
             else if (astNode.getLocation().getParentInput().name == 'TIMES'){
                 var screenReader = document.getElementById("screenReader");
                 screenReader.innerHTML = 'Blank';
-                //window.speechSynthesis.cancel();
-                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("Blank"))
             }
             else if (astNode.getLocation().getParentInput().name == 'A'){
                 var screenReader = document.getElementById("screenReader");
                 screenReader.innerHTML = 'left operand';
-                //window.speechSynthesis.cancel();
-                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("left operand"))
             }
             else if (astNode.getLocation().getParentInput().name == 'B'){
                 var screenReader = document.getElementById("screenReader");
                 screenReader.innerHTML = 'right operand';
-                //window.speechSynthesis.cancel();
-                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("right operand"))
             }
             else if( astNode.getLocation().getParentInput().name == 'BOOL' || astNode.getLocation().getParentInput().name == 'TEXT' || astNode.getLocation().getParentInput().name == 'VALUE'){
                 var screenReader = document.getElementById("screenReader");
                 screenReader.innerHTML = 'input connection';
-                //window.speechSynthesis.cancel();
-                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("input connection"))
             }
             else {
-            //window.speechSynthesis.cancel();
             var screenReader = document.getElementById("screenReader");
             screenReader.innerHTML = astNode.getLocation().getParentInput().name;
-            //window.speechSynthesis.speak(new SpeechSynthesisUtterance(astNode.getLocation().getParentInput().name))
             }
             
         }
@@ -201,25 +177,12 @@ function onConnections(event) {
             if (field.getText() == '≤'){
                 var screenReader = document.getElementById("screenReader");
                 screenReader.innerHTML = 'lesser than or equal to'
-                if (window.speechSynthesis.speaking) {
-                    //window.speechSynthesis.cancel();
-                    //setTimeout(function () {window.speechSynthesis.speak(new SpeechSynthesisUtterance('lesser than or equal to')) }, 250);
-                }
             }
             else {
-                 if (window.speechSynthesis.speaking) {
                     var screenReader = document.getElementById("screenReader");
                     screenReader.innerHTML = field.getText()
-                    //window.speechSynthesis.cancel();
-                    //window.speechSynthesis.speak(new SpeechSynthesisUtterance(field.getText()))
-                 }
-                else {
-                     var screenReader = document.getElementById("screenReader");
-                     screenReader.innerHTML = field.getText()
-                    //window.speechSynthesis.speak(new SpeechSynthesisUtterance(field.getText()))
                 }
             }
-        }
 
         if (astNode.getType() == Blockly.ASTNode.types.NEXT) {
             var field = astNode.getLocation();
@@ -236,43 +199,31 @@ function onConnections(event) {
                 myAudio.play();
                 
             }
-           //window.speechSynthesis.cancel();
            var screenReader = document.getElementById("screenReader");
            screenReader.innerHTML = speak
-           //setTimeout(() => window.speechSynthesis.speak(new SpeechSynthesisUtterance(speak)), 500); 
-        }          
+        } 
       }
       if (event.type == Blockly.Events.MOVE) {
         var movedBlock = workspace.getBlockById(event.blockId);
         var blockParent = workspace.getBlockById(event.newParentId);
         if (movedBlock != null && blockParent != null){
             var screenReader = document.getElementById("screenReader");
-            screenReader.innerHTML = blocks[movedBlock.type] + '  ' + 'connected to' + '  ' + blocks[blockParent.type]
-            a = blocks[movedBlock.type] + '  ' + 'connected to' + '  ' + blocks[blockParent.type]
-            speak3 = new SpeechSynthesisUtterance(blocks[movedBlock.type] + '  ' + 'connected to' + '  ' + blocks[blockParent.type])
-            console.log(speak3)
-            //window.speechSynthesis.speak(speak3);
+            screenReader.innerHTML = blocks[movedBlock.type] + '  ' + 'connected to' + '  ' + blocks[blockParent.type] + a
         }
       }
       if (event.type == Blockly.Events.UI && event.element == "markerMove" && event.oldValue != event.newValue) {
-          //window.speechSynthesis.cancel();
           var screenReader = document.getElementById("screenReader");
           screenReader.innerHTML = 'connection marked'
-          //window.speechSynthesis.speak(new SpeechSynthesisUtterance('connection marked'));
       }
       if (event.element == 'fieldMove') {
         var newHighlightedValue = event.newValue;
         var screenReader = document.getElementById("screenReader");
         screenReader.innerHTML = newHighlightedValue
-        //window.speechSynthesis.cancel();
-        //window.speechSynthesis.speak(new SpeechSynthesisUtterance(newHighlightedValue))
       }
     
       if (event.element == 'buttonFocused') {
           var screenReader = document.getElementById("screenReader");
           screenReader.innerHTML = 'Create Variable'
-          //window.speechSynthesis.cancel();
-          //window.speechSynthesis.speak(new SpeechSynthesisUtterance("Create Variable"))
       }
     
 }
@@ -283,12 +234,8 @@ function onConnections1(event) {
       if (event.type == Blockly.Events.UI && event.element == "cursorMove") {
           var astNode = event.newValue;
           if (astNode.getType() == Blockly.ASTNode.types.STACK) {
-            if (window.speechSynthesis.speaking) {
-                //window.speechSynthesis.cancel();
-            }
             var screenReader = document.getElementById("screenReader");
             screenReader.innerHTML = blocks[blockname.type]
-            //window.speechSynthesis.speak(new SpeechSynthesisUtterance(blocks[blockname.type]))
         }
       }
 }

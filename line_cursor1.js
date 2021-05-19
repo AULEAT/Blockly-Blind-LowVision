@@ -179,10 +179,12 @@ Blockly.LineCursor.prototype.onBlocklyAction = function(action) {
     // Gets the source block from the current node.
     var currentBlock = currentNode.getSourceBlock();
     try {
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentBlock.tooltip()))
+        var screenReader = document.getElementById("screenReader");
+        screenReader.innerHTML = currentBlock.tooltip()
     }
     catch {
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentBlock.tooltip))    
+        var screenReader = document.getElementById("screenReader");
+        screenReader.innerHTML = currentBlock.tooltip 
   }
   }
   if (!handled && action.name === 'info') {
@@ -192,7 +194,8 @@ Blockly.LineCursor.prototype.onBlocklyAction = function(action) {
     var currentBlock = currentNode.getSourceBlock();
     var text = currentBlock.toString();
     var text = text.replaceAll('?', 'blank')
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+    var screenReader = document.getElementById("screenReader");
+    screenReader.innerHTML = text
   }
   if (!handled && action.name === 'delete') {
     // Gets the current node.
@@ -200,7 +203,7 @@ Blockly.LineCursor.prototype.onBlocklyAction = function(action) {
       var block = this.getCurNode().getSourceBlock();
       block.dispose(true, true);
       Blockly.Events.setGroup(false);
-      window.speechSynthesis.speak(new SpeechSynthesisUtterance('block deleted'))
-      
+      var screenReader = document.getElementById("screenReader");
+      screenReader.innerHTML = 'block deleted'
   }
 }
