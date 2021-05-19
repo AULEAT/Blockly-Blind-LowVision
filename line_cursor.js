@@ -156,17 +156,15 @@ Blockly.LineCursor.prototype.validLineNode_ = function(node) {
  * @private
  */
 Blockly.LineCursor.prototype.validInLineNode_ = function(node) {
-  if (!node) {
-    return false;
-  }
   var isValid = false;
-  var location = node.getLocation();
   var type = node && node.getType();
-  if (type == Blockly.ASTNode.types.FIELD) {
-      isValid = true;
-  } else if (type == Blockly.ASTNode.types.INPUT &&
-      location.type == Blockly.INPUT_VALUE) {
-      isValid = true;
+  if (type == Blockly.ASTNode.types.OUTPUT ||
+      type == Blockly.ASTNode.types.INPUT ||
+      type == Blockly.ASTNode.types.FIELD ||
+      type == Blockly.ASTNode.types.NEXT ||
+      type == Blockly.ASTNode.types.PREVIOUS ||
+      type == Blockly.ASTNode.types.WORKSPACE) {
+    isValid = true;
   }
   return isValid;
 };
@@ -181,10 +179,10 @@ Blockly.LineCursor.prototype.onBlocklyAction = function(action) {
     // Gets the source block from the current node.
     var currentBlock = currentNode.getSourceBlock();
     try {
-        responsiveVoice.speak(currentBlock.tooltip());
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentBlock.tooltip()))
     }
     catch {
-        responsiveVoice.speak(currentBlock.tooltip);     
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentBlock.tooltip))    
   }
   }
   if (!handled && action.name === 'info') {
@@ -194,8 +192,8 @@ Blockly.LineCursor.prototype.onBlocklyAction = function(action) {
     var currentBlock = currentNode.getSourceBlock();
     var text = currentBlock.toString();
     var text = text.replaceAll('?', 'blank')
-    console.log(text);
-    responsiveVoice.speak(text);
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+    //responsiveVoice.speak(text);
   }
   if (!handled && action.name === 'delete') {
     // Gets the current node.
@@ -203,7 +201,8 @@ Blockly.LineCursor.prototype.onBlocklyAction = function(action) {
       var block = this.getCurNode().getSourceBlock();
       block.dispose(true, true);
       Blockly.Events.setGroup(false);
-      responsiveVoice.speak('block deleted');
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance('block deleted'))
+      //responsiveVoice.speak('block deleted');
       
   }
 }

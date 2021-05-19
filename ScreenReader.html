@@ -1,0 +1,297 @@
+<script src="blockly_compressed.js"></script>
+<script src="blocks_compressed.js"></script>
+<script src="line_cursor.js"></script>
+<script src="msg/js/en.js"></script>
+
+<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+<div id="screenReader" aria-live="assertive" aria-atomic="true" style="font-size: 0"></div>
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Logic" categorystyle="logic_category">
+      <block type ='controls_if'></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+    </category>
+    <category name="Loops" categorystyle="loop_category">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math" categorystyle="math_category">
+      <block type="math_number" gap="32">
+        <field name="NUM">123</field>
+      </block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Text" categorystyle="text_category">
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE"></category>
+  </xml>
+
+<script>
+
+
+  
+  var blocks = {"controls_if": "if else block", "controls_repeat_ext": 'repeat block', "logic_compare": 'logic compare block', "logic_operation" : 'logic operation block', "logic_negate": 'logic negate block', "logic_boolean": 'logic boolean block', "math_number": 'number block', "math_arithmetic": 'arithmetic block', "text": 'text block', "text_print": 'print block', 'controls_whileUntil': 'repeat while or until block', 'variables_set': 'set variable', 'controls_for':'FOR loop block', 'controls_forEach': 'FOR each block', 'controls_flow_statements': 'flow statements block', 'math_change': 'change variable', 'variables_get': 'get variable'}
+  var workspace = Blockly.inject('blocklyDiv',
+      {toolbox: document.getElementById('toolbox'),
+       trashcan: true});
+  console.log(workspace.getAllBlocks(true));
+  Blockly.navigation.enableKeyboardAccessibility();
+  var flyoutWorkspace = workspace.getFlyout().getWorkspace();
+  Blockly.navigation.enableKeyboardAccessibility();
+  var markerManager = Blockly.getMainWorkspace().getMarkerManager();
+  var toolboxMarkerManager = flyoutWorkspace.getMarkerManager();
+  Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+  markerManager.setCursor(new Blockly.LineCursor());
+  //shows tooltip
+  var ctrlT = Blockly.user.keyMap.createSerializedKey(
+  Blockly.utils.KeyCodes.T, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+  var actionTooltip = new Blockly.Action('tooltip', 'displays tooltip');
+  Blockly.user.keyMap.setActionForKey(ctrlT, actionTooltip);
+  //block info
+  var ctrlI = Blockly.user.keyMap.createSerializedKey(
+  Blockly.utils.KeyCodes.I, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+  var actionInfo = new Blockly.Action('info', 'displays info');
+  Blockly.user.keyMap.setActionForKey(ctrlI, actionInfo);
+  var a = ''
+  //delete block
+  var deleteInfo = new Blockly.Action('delete', 'deletes block');
+  Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.DELETE] = new Blockly.Action('delete', 'deletes block');
+  Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.BACKSPACE] = new Blockly.Action('delete', 'deletes block');
+                                      
+  
+function onConnections(event) {
+      var myAudio = document.createElement('audio');
+      myAudio.crossOrigin = "anonymous";
+      myAudio.src = "media/click.mp3";
+      console.log(event);
+      var blockid = event.blockId;
+      var blockname = workspace.getBlockById(blockid);
+      console.log(blockname)
+      if (event.type == Blockly.Events.UI && event.element == "category") {
+         currentValue = event.newValue;
+         //window.speechSynthesis.cancel();
+         var category = event.newValue;
+         if (category != null){
+            var screenReader = document.getElementById("screenReader");
+            screenReader.innerHTML = category
+            //window.speechSynthesis.speak(new SpeechSynthesisUtterance(category))
+         }
+      }
+      if (event.type == Blockly.Events.UI && event.element == "cursorMove") {
+        var astNode = event.newValue;
+        var oldNode = event.oldValue;
+        if (astNode.getType() == Blockly.ASTNode.types.BLOCK) {
+            var screenReader = document.getElementById("screenReader");
+            screenReader.innerHTML = blocks[blockname.type] + '   ' + 'block connection' + ' ' + a
+            var field = astNode.getLocation();
+            var speak2 = new SpeechSynthesisUtterance(blocks[blockname.type] + '   ' + 'block connection');
+            if (blockname == blockname.getTopStackBlock() && blockname.getSurroundParent() != null & blockname.statementInputCount > 0){
+                console.log(blockname.getTopStackBlock());
+                var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                var source = audioCtx.createMediaElementSource(myAudio);
+                var panNode = audioCtx.createStereoPanner();
+                panNode.pan.value = -1;
+                source.connect(panNode);
+                panNode.connect(audioCtx.destination);
+                myAudio.play();
+                //setTimeout(() => window.speechSynthesis.speak(speak2), 500); 
+            }
+            else{ 
+                if (window.speechSynthesis.speaking) {
+                //setTimeout(() => window.speechSynthesis.speak(speak2), 100); 
+            }
+                else {
+                //window.speechSynthesis.speak(speak2); 
+            }
+                }
+        }
+        if (astNode.getType() == Blockly.ASTNode.types.INPUT) {
+            if (astNode.getLocation().getParentInput().name == 'DO0'){
+                var screenReader = document.getElementById("screenReader");
+                screenReader.innerHTML = 'Do connection';
+                //window.speechSynthesis.cancel();
+                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("Do connection"))
+            }
+            else if (astNode.getLocation().getParentInput().name == 'IF0'){
+                var screenReader = document.getElementById("screenReader");
+                screenReader.innerHTML = 'If connection';
+                //window.speechSynthesis.cancel();
+                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("If connection"))
+            }
+            else if (astNode.getLocation().getParentInput().name == 'TIMES'){
+                var screenReader = document.getElementById("screenReader");
+                screenReader.innerHTML = 'Blank';
+                //window.speechSynthesis.cancel();
+                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("Blank"))
+            }
+            else if (astNode.getLocation().getParentInput().name == 'A'){
+                var screenReader = document.getElementById("screenReader");
+                screenReader.innerHTML = 'left operand';
+                //window.speechSynthesis.cancel();
+                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("left operand"))
+            }
+            else if (astNode.getLocation().getParentInput().name == 'B'){
+                var screenReader = document.getElementById("screenReader");
+                screenReader.innerHTML = 'right operand';
+                //window.speechSynthesis.cancel();
+                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("right operand"))
+            }
+            else if( astNode.getLocation().getParentInput().name == 'BOOL' || astNode.getLocation().getParentInput().name == 'TEXT' || astNode.getLocation().getParentInput().name == 'VALUE'){
+                var screenReader = document.getElementById("screenReader");
+                screenReader.innerHTML = 'input connection';
+                //window.speechSynthesis.cancel();
+                //window.speechSynthesis.speak(new SpeechSynthesisUtterance("input connection"))
+            }
+            else {
+            //window.speechSynthesis.cancel();
+            var screenReader = document.getElementById("screenReader");
+            screenReader.innerHTML = astNode.getLocation().getParentInput().name;
+            //window.speechSynthesis.speak(new SpeechSynthesisUtterance(astNode.getLocation().getParentInput().name))
+            }
+            
+        }
+        if (astNode.getType() == Blockly.ASTNode.types.FIELD) {
+            var field = astNode.getLocation();
+            if (field.getText() == '≤'){
+                var screenReader = document.getElementById("screenReader");
+                screenReader.innerHTML = 'lesser than or equal to'
+                if (window.speechSynthesis.speaking) {
+                    //window.speechSynthesis.cancel();
+                    //setTimeout(function () {window.speechSynthesis.speak(new SpeechSynthesisUtterance('lesser than or equal to')) }, 250);
+                }
+            }
+            else {
+                 if (window.speechSynthesis.speaking) {
+                    var screenReader = document.getElementById("screenReader");
+                    screenReader.innerHTML = field.getText()
+                    //window.speechSynthesis.cancel();
+                    //window.speechSynthesis.speak(new SpeechSynthesisUtterance(field.getText()))
+                 }
+                else {
+                     var screenReader = document.getElementById("screenReader");
+                     screenReader.innerHTML = field.getText()
+                    //window.speechSynthesis.speak(new SpeechSynthesisUtterance(field.getText()))
+                }
+            }
+        }
+
+        if (astNode.getType() == Blockly.ASTNode.types.NEXT) {
+            var field = astNode.getLocation();
+            var speak = blocks[blockname.type] + ' ' + ' bottom connection';
+            var screenReader = document.getElementById("screenReader");
+            screenReader.innerHTML = speak
+            if (blockname.getNextBlock() == null && blockname.getSurroundParent() != null & blockname.statementInputCount > 0){
+                var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                var source = audioCtx.createMediaElementSource(myAudio);
+                var panNode = audioCtx.createStereoPanner();
+                panNode.pan.value = 1;
+                source.connect(panNode);
+                panNode.connect(audioCtx.destination);
+                myAudio.play();
+                
+            }
+           //window.speechSynthesis.cancel();
+           var screenReader = document.getElementById("screenReader");
+           screenReader.innerHTML = speak
+           //setTimeout(() => window.speechSynthesis.speak(new SpeechSynthesisUtterance(speak)), 500); 
+        }          
+      }
+      if (event.type == Blockly.Events.MOVE) {
+        var movedBlock = workspace.getBlockById(event.blockId);
+        var blockParent = workspace.getBlockById(event.newParentId);
+        if (movedBlock != null && blockParent != null){
+            var screenReader = document.getElementById("screenReader");
+            screenReader.innerHTML = blocks[movedBlock.type] + '  ' + 'connected to' + '  ' + blocks[blockParent.type]
+            a = blocks[movedBlock.type] + '  ' + 'connected to' + '  ' + blocks[blockParent.type]
+            speak3 = new SpeechSynthesisUtterance(blocks[movedBlock.type] + '  ' + 'connected to' + '  ' + blocks[blockParent.type])
+            console.log(speak3)
+            //window.speechSynthesis.speak(speak3);
+        }
+      }
+      if (event.type == Blockly.Events.UI && event.element == "markerMove" && event.oldValue != event.newValue) {
+          //window.speechSynthesis.cancel();
+          var screenReader = document.getElementById("screenReader");
+          screenReader.innerHTML = 'connection marked'
+          //window.speechSynthesis.speak(new SpeechSynthesisUtterance('connection marked'));
+      }
+      if (event.element == 'fieldMove') {
+        var newHighlightedValue = event.newValue;
+        var screenReader = document.getElementById("screenReader");
+        screenReader.innerHTML = newHighlightedValue
+        //window.speechSynthesis.cancel();
+        //window.speechSynthesis.speak(new SpeechSynthesisUtterance(newHighlightedValue))
+      }
+    
+      if (event.element == 'buttonFocused') {
+          var screenReader = document.getElementById("screenReader");
+          screenReader.innerHTML = 'Create Variable'
+          //window.speechSynthesis.cancel();
+          //window.speechSynthesis.speak(new SpeechSynthesisUtterance("Create Variable"))
+      }
+    
+}
+function onConnections1(event) {
+      
+      var blockid = event.blockId;
+      var blockname = flyoutWorkspace.getBlockById(blockid);
+      if (event.type == Blockly.Events.UI && event.element == "cursorMove") {
+          var astNode = event.newValue;
+          if (astNode.getType() == Blockly.ASTNode.types.STACK) {
+            if (window.speechSynthesis.speaking) {
+                //window.speechSynthesis.cancel();
+            }
+            var screenReader = document.getElementById("screenReader");
+            screenReader.innerHTML = blocks[blockname.type]
+            //window.speechSynthesis.speak(new SpeechSynthesisUtterance(blocks[blockname.type]))
+        }
+      }
+}
+workspace.addChangeListener(onConnections);
+flyoutWorkspace.addChangeListener(onConnections1);
+</script>

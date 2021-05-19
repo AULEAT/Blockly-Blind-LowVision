@@ -40,8 +40,14 @@ Blockly.BasicCursor.prototype.next = function() {
   if (!curNode) {
     return null;
   }
-  var newNode = this.getNextNode_(curNode, this.validNode_);
+  var newNode = this.getNextNode_(curNode, this.validLineNode_);
 
+  // Skip the input or next value if there is a connected block.
+  if (newNode && (newNode.getType() == Blockly.ASTNode.types.INPUT ||
+      newNode.getType() == Blockly.ASTNode.types.NEXT) &&
+      newNode.getLocation().targetBlock()) {
+    newNode = this.getNextNode_(newNode, this.validLineNode_);
+  }
   if (newNode) {
     this.setCurNode(newNode);
   }
@@ -56,7 +62,16 @@ Blockly.BasicCursor.prototype.next = function() {
  * @override
  */
 Blockly.BasicCursor.prototype.in = function() {
-  return this.next();
+  var curNode = this.getCurNode();
+  if (!curNode) {
+    return null;
+  }
+  var newNode = this.getNextNode_(curNode, this.validNode_);
+
+  if (newNode) {
+    this.setCurNode(newNode);
+  }
+  return newNode;
 };
 
 /**
@@ -67,10 +82,17 @@ Blockly.BasicCursor.prototype.in = function() {
  */
 Blockly.BasicCursor.prototype.prev = function() {
   var curNode = this.getCurNode();
+  //console.log(curNode);
   if (!curNode) {
     return null;
   }
-  var newNode = this.getPreviousNode_(curNode, this.validNode_);
+  var newNode = this.getPreviousNode_(curNode, this.validLineNode_);
+  
+  if (newNode && (newNode.getType() == Blockly.ASTNode.types.INPUT ||
+    newNode.getType() == Blockly.ASTNode.types.NEXT) &&
+    newNode.getLocation().targetBlock()) {
+    newNode = this.getPreviousNode_(newNode, this.validLineNode_);
+  }
 
   if (newNode) {
     this.setCurNode(newNode);
@@ -86,7 +108,16 @@ Blockly.BasicCursor.prototype.prev = function() {
  * @override
  */
 Blockly.BasicCursor.prototype.out = function() {
-  return this.prev();
+  var curNode = this.getCurNode();
+  if (!curNode) {
+    return null;
+  }
+  var newNode = this.getPreviousNode_(curNode, this.validNode_);
+
+  if (newNode) {
+    this.setCurNode(newNode);
+  }
+  return newNode;
 };
 
 /**
