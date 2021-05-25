@@ -1,0 +1,414 @@
+<script src="blockly_compressed.js"></script>
+<script src="blocks_compressed.js"></script>
+<script src="line_cursor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+<script src="msg/js/en.js"></script>
+<script src="https://unpkg.com/compromise"></script>
+
+<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Logic" categorystyle="logic_category">
+        <block type ='controls_if'></block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean"></block>
+    </category>
+    <category name="Loops" categorystyle="loop_category">
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_whileUntil"></block>
+        <block type="controls_for">
+            <value name="FROM">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="TO">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+            <value name="BY">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_forEach"></block>
+        <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math" categorystyle="math_category">
+        <block type="math_number" gap="32">
+            <field name="NUM">123</field>
+        </block>
+        <block type="math_arithmetic">
+            <value name="A">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="B">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+    </category>
+    <category name="Text" categorystyle="text_category">
+        <block type="text_print">
+            <value name="TEXT">
+                <shadow type="text">
+                    <field name="TEXT">abc</field>
+                </shadow>
+            </value>
+        </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE"></category>
+</xml>
+
+<script>
+
+
+
+    var blocks = {"controls_if": "if else block", "controls_repeat_ext": 'repeat block', "logic_compare": 'logic compare block', "logic_operation" : 'logic operation block', "logic_negate": 'logic negate block', "logic_boolean": 'logic boolean block', "math_number": 'number block', "math_arithmetic": 'arithmetic block', "text": 'text block', "text_print": 'print block', 'controls_whileUntil': 'repeat while or until block', 'variables_set': 'set variable', 'controls_for':'FOR loop block', 'controls_forEach': 'FOR each block', 'controls_flow_statements': 'flow statements block', 'math_change': 'change variable', 'variables_get': 'get variable'}
+    var workspace = Blockly.inject('blocklyDiv',
+                                   {toolbox: document.getElementById('toolbox'),
+                                    trashcan: true});
+    console.log(workspace.getAllBlocks(true));
+    Blockly.navigation.enableKeyboardAccessibility();
+    var flyoutWorkspace = workspace.getFlyout().getWorkspace();
+    Blockly.navigation.enableKeyboardAccessibility();
+    var markerManager = Blockly.getMainWorkspace().getMarkerManager();
+    var toolboxMarkerManager = flyoutWorkspace.getMarkerManager();
+    Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+    markerManager.setCursor(new Blockly.LineCursor());
+    //shows tooltip
+    var ctrlT = Blockly.user.keyMap.createSerializedKey(
+        Blockly.utils.KeyCodes.T, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+    var actionTooltip = new Blockly.Action('tooltip', 'displays tooltip');
+    Blockly.user.keyMap.setActionForKey(ctrlT, actionTooltip);
+    //block info
+    var ctrlI = Blockly.user.keyMap.createSerializedKey(
+        Blockly.utils.KeyCodes.I, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+    var actionInfo = new Blockly.Action('info', 'displays info');
+    Blockly.user.keyMap.setActionForKey(ctrlI, actionInfo);
+    //delete block
+    var deleteInfo = new Blockly.Action('delete', 'deletes block');
+    Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.DELETE] = new Blockly.Action('delete', 'deletes block');
+    Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.BACKSPACE] = new Blockly.Action('delete', 'deletes block');
+    var currentValue = ''
+    var c = ''
+    var toolboxVal = ''
+    var arr = ['Logic', 'Loops', 'Math', 'Text', 'Variables']
+    var logicCategories1 = ['if', 'equal', 'and', 'not', 'true']
+    var firstBlocks = ['if', 'repeat times', 'number', 'print', 'create variable']
+    var adict = {'Logic': ['if', 'equal', 'and', 'not', 'true'], 'Loops': ['repeat times', 'repeat while', 'count', 'for each', 'break out'],
+                 'Math': ['numbers', 'add'], 'Text': ['print'], 'Variables': ['create variable']}
+    var loopCategories = ['repeat times', 'repeat while', 'count', 'for each', 'break out']
+    var text = ['print']
+    var lineNavigationDown = ['Go to next line', 'Go down', 'down', '', '']
+    var lineNavigationUp = ['Go to previous line', 'Go up','top', '','']
+    var lineNavigationIn = ['Go in', 'Go forward']
+    var lineNavigationOut = ['Go out', 'Go back']
+    var select = ['select', 'choose']
+    var action = ['create', 'select', 'drag']
+    var numbers = ['one', 'two', 'three', 'four']
+    function toolbox(){
+        console.log(c, currentValue)
+        if (c == 'Logic' && currentValue == '') {     
+            document.dispatchEvent(new KeyboardEvent("keydown", {
+                keyCode: 84}))
+            currentValue = c
+        }
+        else if (!arr.includes(currentValue) && currentValue != ''){
+            document.dispatchEvent(new KeyboardEvent("keydown", {
+                keyCode: 84}))
+            var num = arr.indexOf(c) - arr.indexOf(toolboxVal)
+            if (num > 0){
+                for (var i = 0; i < num; i += 1){
+                    document.dispatchEvent(new KeyboardEvent("keydown", {
+                        keyCode: 83}))
+                }
+                currentValue = c
+            }
+            else if (num < 0){
+                console.log(currentValue)
+                for (var i = 0; i > num; i -= 1){
+                    document.dispatchEvent(new KeyboardEvent("keydown", {
+                        keyCode: 87}))
+                }
+                currentValue = c 
+            }
+        }
+        else {
+            document.dispatchEvent(new KeyboardEvent("keydown", {
+                keyCode: 84}))
+            var num = arr.indexOf(c) - arr.indexOf(currentValue)
+            if (currentValue == ''){
+                console.log("Here")
+                for (var i = 1; i < num; i += 1){
+                    document.dispatchEvent(new KeyboardEvent("keydown", {
+                        keyCode: 83}))
+                }
+                currentValue = c
+            }
+            else {
+                console.log("NOW HERE")
+                console.log(num);
+                if (num > 0){
+                    for (var i = 0; i < num; i += 1){
+                        document.dispatchEvent(new KeyboardEvent("keydown", {
+                            keyCode: 83}))
+                    }
+                    currentValue = c
+                }
+                else if (num < 0){
+                    console.log(currentValue)
+                    for (var i = 0; i > num; i -= 1){
+                        document.dispatchEvent(new KeyboardEvent("keydown", {
+                            keyCode: 87}))
+                    }
+                    currentValue = c 
+                }
+            }
+        }
+        toolboxVal = currentValue
+    }
+
+    function blocksNav(){
+        console.log("inside blocks")
+        console.log(toolboxVal)
+        console.log(currentValue)
+        if (arr.includes(currentValue)){
+            if (firstBlocks.includes(c)){
+                console.log("HOLA")
+                document.dispatchEvent(new KeyboardEvent("keydown", {
+                    keyCode: 68})) 
+                currentValue = c
+            }
+            else {
+                document.dispatchEvent(new KeyboardEvent("keydown", {
+                    keyCode: 68})) 
+                console.log(toolboxVal)
+                var chosenArr = adict[toolboxVal]
+                var num1 = chosenArr.indexOf(c) - chosenArr.indexOf(currentValue)
+                console.log(num1, c, currentValue)
+                if (num1 > 0){
+                    for (var i = 1; i < num1; i += 1){
+                        document.dispatchEvent(new KeyboardEvent("keydown", {
+                            keyCode: 83}))
+                    }
+                    currentValue = c
+                }
+
+                else if (num1 < 0){
+                    console.log(currentValue)
+                    for (var i = 0; i > num1; i -= 1){
+                        document.dispatchEvent(new KeyboardEvent("keydown", {
+                            keyCode: 87}))
+                    }
+                    currentValue = c 
+                }
+            }
+        }
+        else{
+            var chosenArr = adict[toolboxVal]
+            var num1 = chosenArr.indexOf(c) - chosenArr.indexOf(currentValue)
+            console.log(num1)
+            if (num1 > 0){
+                for (var i = 0; i < num1; i += 1){
+                    document.dispatchEvent(new KeyboardEvent("keydown", {
+                        keyCode: 83}))
+                }
+                currentValue = c
+            }
+            else if (num1 < 0){
+                console.log(currentValue)
+                for (var i = 0; i > num1; i -= 1){
+                    document.dispatchEvent(new KeyboardEvent("keydown", {
+                        keyCode: 87}))
+                }
+                currentValue = c 
+            }
+        }
+    }
+
+    function main(){
+        annyang.addCallback('result', function(whatWasHeardArray) {
+            let doc1 = whatWasHeardArray
+            dance: 
+            for (var i = 0; i < 5; i += 1){
+                let doc = nlp(doc1[i])
+                for (var j = 0; j < 5; j += 1){
+                    var m = doc.match(arr[j], { fuzzy: 0.5 }) //enable fuzzy-match
+                    if (m.out('array').length > 0){
+                        c = arr[j]
+                        console.log(c)
+                        toolbox()
+                        break dance
+                    }
+                    else if ((toolboxVal == 'Logic') && ((doc.match(adict['Logic'][j], { fuzzy: 0.4 })).out('array').length > 0)){
+                        console.log(toolboxVal)
+                        c = adict['Logic'][j]
+                        console.log(c)
+                        blocksNav()
+                        break dance
+                    }
+                    else if ((toolboxVal == 'Loops') && ((doc.match(adict['Loops'][j], { fuzzy: 0.4 })).out('array').length > 0)){
+                        c = adict['Loops'][j]
+                        console.log(c)
+                        blocksNav()
+                        break dance
+                    }
+
+                    else if ((toolboxVal == 'Text') && ((doc.match(adict['Text'][j], { fuzzy: 0.4 })).out('array').length > 0)){
+                        c = adict['Text'][j]
+                        console.log(c)
+                        blocksNav()
+                        break dance
+                    }
+                    
+                     else if ((toolboxVal == 'Math') && ((doc.match(adict['Math'][j], { fuzzy: 0.4 })).out('array').length > 0)){
+                        c = adict['Math'][j]
+                        console.log(c)
+                        blocksNav()
+                        break dance
+                    }
+                    
+                     else if ((toolboxVal == 'Variables') && ((doc.match(adict['Variables'][j], { fuzzy: 0.4 })).out('array').length > 0)){
+                        c = adict['Variables'][j]
+                        console.log(c)
+                        blocksNav()
+                        break dance
+                    }
+                    else if (doc.match(lineNavigationDown[j], { fuzzy: 0.4 }).out('array').length > 0){
+                        c = lineNavigationDown[j]
+                        if (doc.match('two').out('array').length > 0) {
+                            for (var x = 0; x < 2; x += 1){
+                                document.dispatchEvent(new KeyboardEvent("keydown", {
+                                    keyCode: 83}))
+                            }
+                            var key = Object.keys(adict).find((key) => adict[key].includes(currentValue));
+                            var values = adict[key]
+                            var givenListIndex = values.indexOf(currentValue)
+                            var nextIndex = givenListIndex + 2
+                            currentValue = values[nextIndex]
+                            break dance
+                        }
+
+                        else{
+                            document.dispatchEvent(new KeyboardEvent("keydown", {
+                                keyCode: 83}))
+                            var key = Object.keys(adict).find((key) => adict[key].includes(currentValue));
+                            var values = adict[key]
+                            var givenListIndex = values.indexOf(currentValue)
+                            var nextIndex = givenListIndex + 1
+                            currentValue = values[nextIndex]
+                            break dance
+                        }
+                        
+                        
+                    }
+                    else if (doc.match(lineNavigationUp[j], { fuzzy: 0.4 }).out('array').length > 0){
+                        if (doc.match('two').out('array').length > 0) {
+                            for (var x = 0; x < 2; x += 1){
+                                document.dispatchEvent(new KeyboardEvent("keydown", {
+                                    keyCode: 87}))
+                            }
+                            var key = Object.keys(adict).find((key) => adict[key].includes(currentValue));
+                            var values = adict[key]
+                            var givenListIndex = values.indexOf(currentValue)
+                            var nextIndex = givenListIndex - 2
+                            currentValue = values[nextIndex]
+                            break dance
+                        }
+
+                        else{
+                            console.log(c)
+                            document.dispatchEvent(new KeyboardEvent("keydown", {
+                                keyCode: 87}))
+                            var key = Object.keys(adict).find((key) => adict[key].includes(currentValue));
+                            var values = adict[key]
+                            var givenListIndex = values.indexOf(currentValue)
+                            var nextIndex = givenListIndex - 1
+                            currentValue = values[nextIndex]
+                            break dance
+                        }
+                    }
+
+                    else if (doc.match(lineNavigationIn[j], { fuzzy: 0.4 }).out('array').length > 0){
+                        if (doc.match('two').out('array').length > 0) {
+                            for (var x = 0; x < 2; x += 1){
+                                document.dispatchEvent(new KeyboardEvent("keydown", {
+                                    keyCode: 68}))
+                            }
+                            break dance
+                        }
+
+                        else{
+                            console.log(c)
+                            document.dispatchEvent(new KeyboardEvent("keydown", {
+                                keyCode: 68}))
+                            break dance
+                        }
+                    }
+
+                    else if (doc.match(lineNavigationOut[j], { fuzzy: 0.4 }).out('array').length > 0){
+                        if (doc.match('two').out('array').length > 0) {
+                            for (var x = 0; x < 2; x += 1){
+                                document.dispatchEvent(new KeyboardEvent("keydown", {
+                                    keyCode: 65}))
+                            }
+                            break dance
+                        }
+
+                        else{
+                            console.log(c)
+                            document.dispatchEvent(new KeyboardEvent("keydown", {
+                                keyCode: 65}))
+                            break dance
+                        }
+                    }
+
+                    else if (doc.match(select[j], { fuzzy: 0.8 }).out('array').length > 0){
+                        c = select[j]
+                        console.log(c)
+                        document.dispatchEvent(new KeyboardEvent("keydown", {
+                            keyCode: 13}))
+                        toolboxVal = 'Logic'
+                        break dance
+                    }
+
+
+                    else if (doc.match('Delete this block', { fuzzy: 0.4 }).out('array').length > 0){
+                        c = select[j]
+                        console.log(c)
+                        document.dispatchEvent(new KeyboardEvent("keydown", {
+                            keyCode: 8}))
+                        toolboxVal = 'Logic'
+                        break dance
+                    }
+
+                    else if (doc.match('mark this connection', { fuzzy: 0.4 }).out('array').length > 0){
+                        c = select[j]
+                        console.log(c)
+                        document.dispatchEvent(new KeyboardEvent("keydown", {
+                            keyCode: 13}))
+                        toolboxVal = 'Logic'
+                        break dance
+                    }
+                }}           
+
+        }
+                           )}
+    main()
+    annyang.start();
+
+</script>

@@ -1,0 +1,141 @@
+<script src="blockly_compressed.js"></script>
+<script src="blocks_compressed.js"></script>
+<script src="line_cursor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+<script src="msg/js/en.js"></script>
+
+<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Logic" categorystyle="logic_category">
+        <block type ='controls_if'></block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean"></block>
+    </category>
+    <category name="Loops" categorystyle="loop_category">
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_whileUntil"></block>
+        <block type="controls_for">
+            <value name="FROM">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="TO">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+            <value name="BY">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_forEach"></block>
+        <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math" categorystyle="math_category">
+        <block type="math_number" gap="32">
+            <field name="NUM">123</field>
+        </block>
+        <block type="math_arithmetic">
+            <value name="A">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="B">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+    </category>
+    <category name="Text" categorystyle="text_category">
+        <block type="text_print">
+            <value name="TEXT">
+                <shadow type="text">
+                    <field name="TEXT">abc</field>
+                </shadow>
+            </value>
+        </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE"></category>
+</xml>
+
+<script>
+
+
+
+    var blocks = {"controls_if": "if else block", "controls_repeat_ext": 'repeat block', "logic_compare": 'logic compare block', "logic_operation" : 'logic operation block', "logic_negate": 'logic negate block', "logic_boolean": 'logic boolean block', "math_number": 'number block', "math_arithmetic": 'arithmetic block', "text": 'text block', "text_print": 'print block', 'controls_whileUntil': 'repeat while or until block', 'variables_set': 'set variable', 'controls_for':'FOR loop block', 'controls_forEach': 'FOR each block', 'controls_flow_statements': 'flow statements block', 'math_change': 'change variable', 'variables_get': 'get variable'}
+    var workspace = Blockly.inject('blocklyDiv',
+                                   {toolbox: document.getElementById('toolbox'),
+                                    trashcan: true});
+    console.log(workspace.getAllBlocks(true));
+    Blockly.navigation.enableKeyboardAccessibility();
+    var flyoutWorkspace = workspace.getFlyout().getWorkspace();
+    Blockly.navigation.enableKeyboardAccessibility();
+    var markerManager = Blockly.getMainWorkspace().getMarkerManager();
+    var toolboxMarkerManager = flyoutWorkspace.getMarkerManager();
+    //toolboxMarkerManager.setCursor(new Blockly.LineCursor());
+    Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+    markerManager.setCursor(new Blockly.LineCursor());
+    //shows tooltip
+    var ctrlT = Blockly.user.keyMap.createSerializedKey(
+        Blockly.utils.KeyCodes.T, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+    var actionTooltip = new Blockly.Action('tooltip', 'displays tooltip');
+    Blockly.user.keyMap.setActionForKey(ctrlT, actionTooltip);
+    //block info
+    var ctrlI = Blockly.user.keyMap.createSerializedKey(
+        Blockly.utils.KeyCodes.I, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+    var actionInfo = new Blockly.Action('info', 'displays info');
+    Blockly.user.keyMap.setActionForKey(ctrlI, actionInfo);
+    //delete block
+    var deleteInfo = new Blockly.Action('delete', 'deletes block');
+    Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.DELETE] = new Blockly.Action('delete', 'deletes block');
+    Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.BACKSPACE] = new Blockly.Action('delete', 'deletes block');
+    /**var commands = {'make variable :name': function(name){
+        workspace.createVariable(name)
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance('Variable has been created'))
+    }, **/
+    if (annyang){
+    var commands = {'toolbox': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 84}))
+                },'forward': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 68}))
+                }, 'back': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 65}))
+                }, 'up': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 87}))
+                }, 'down': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 83}))
+                }, 'select': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 13}))
+                },'mark': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 13}))
+                }, 'insert': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 73}))
+            },  'tooltip': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            ctrlKey: true, keyCode: 84}))
+            },  'delete': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            keyCode: 8}))
+            },'information': function() {document.dispatchEvent(new KeyboardEvent("keydown", {
+            ctrlKey: true, keyCode: 73}))     
+            }, }
+                    
+    
+    annyang.addCommands(commands);
+    annyang.start();
+    
+    }
+
+</script>
