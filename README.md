@@ -1,3 +1,59 @@
+#Accessible Blockly
+
+This repository offers code solutions to make Blockly Accessible using Text to Speech, Screen-Reader, Speech to Text and Speech to Text using NLP approach. The first two are meant for blind/low vision users and last two can be beneficial for both blind/low vision and motorically disabled users. 
+
+## License
+
+See more information about License here: [license](https://github.com/AULEAT/Blockly-Blind-LowVision/blob/master/COPYRIGHT%20AND%20PERMISSION%20NOTICE)
+
+
+## Text to Speech
+
+This utilizes the Web Speech API to read block information and Stereo Node Panner to implement Binaural spatialization, i.e denotes click through left side of ear for opening of nested block, and right side of ear to denote closing of nested block. Use the following Keyboard commands to navigate the Blockly environment using Text to Speech:
+
+
+To enter the Toolbox, Press ‘T’. To navigate through categories and blocks in the toolbox, use keys ‘W’ and ‘S’ respectively.
+To navigate up and down ‘lines’ of code(vertically), use keys ‘W’ and ‘S’ respectively.
+To navigate in and out on a ‘line’ of code(horizontally), use keys ‘A’ and ‘D’ respectively.
+To select a block from the toolbox, press ‘Enter’ Key.
+To mark a location for inserting a block, press ‘Enter’ Key. If the block to be inserted is from the toolbox, see previous step. If the block is already present on the workspace, go to its block connection and press 'I' key.
+To delete a block, navigate to the block you wish to delete, and press the DELETE Key.
+To get the tooltip(information on what the block does) for a block, select the required block, and press CTRL + T.
+To get the text representation of a block, press CTRL + I. This also returns text representation of any respective nested children blocks.
+
+## Screen Reader
+
+This utilizes Aria Live Region to communicate same information as the Text to Speech solution using screenreader. This has been tested on Mac Voiceover, but not evaluated by a study with blind individuals yet. Make sure your screenreader is on. Use the following Keyboard commands to navigate the Blockly environment using Text to Speech
+
+To enter the Toolbox, Press ‘T’. To navigate through categories and blocks in the toolbox, use keys ‘W’ and ‘S’ respectively.
+To navigate up and down ‘lines’ of code(vertically), use keys ‘W’ and ‘S’ respectively.
+To navigate in and out on a ‘line’ of code(horizontally), use keys ‘A’ and ‘D’ respectively.
+To select a block from the toolbox, press ‘Enter’ Key.
+To mark a location for inserting a block, press ‘Enter’ Key. If the block to be inserted is from the toolbox, see previous step. If the block is already present on the workspace, go to its block connection and press 'I' key.
+To delete a block, navigate to the block you wish to delete, and press the DELETE Key.
+To get the tooltip(information on what the block does) for a block, select the required block, and press CTRL + T.
+To get the text representation of a block, press CTRL + I. This also returns text representation of any respective nested children blocks.
+
+## Speech to Text
+
+This solution maps voice command to an indivudual keyboard command described in previous two solutions. Here is a list of the voice commands:
+
+| Voice command| Function                                                |
+| :---         |     :---:                                               |          
+| Toolbox      | Enters the toolbox                                      | 
+| forward      | cursor moves ahead horizontally                         | 
+| back         | cursor moves back horizontally                          | 
+| up           | cursor moves up vertically/previous line                | 
+| down         | cursor moves down vertically/next line                  | 
+| select       | selects a block from toolbox                            | 
+| mark         | marks a connection                                      | 
+| insert       | inserts block on workspace to a marked connection       |
+| tooltip      | speaks what the block does                              |
+| delete       | deleted the given block                                 |
+| information  | speaks the text representation of a block               |
+
+
+
 # Blockly [![Build Status]( https://travis-ci.org/google/blockly.svg?branch=master)](https://travis-ci.org/google/blockly)
 
 
