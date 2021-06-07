@@ -9,6 +9,8 @@ See more information about License here: [License](https://github.com/AULEAT/Blo
 
 ## Text to Speech [Text to Speech](https://github.com/AULEAT/Blockly-Blind-LowVision/blob/master/TextToSpeech.html)
 
+[Watch Demo Video of Text to Speech](https://youtu.be/vlPxnPPrz9o)
+
 This utilizes the Web Speech API to read block information and Stereo Node Panner to implement Binaural spatialization, i.e denotes click through left side of ear for opening of nested block, and right side of ear to denote closing of nested block. Use the following Keyboard commands to navigate the Blockly environment using Text to Speech:
 
 * To enter the Toolbox, Press ‘T’. To navigate through categories and blocks in the toolbox, use keys ‘W’ and ‘S’ respectively.
@@ -22,6 +24,8 @@ This utilizes the Web Speech API to read block information and Stereo Node Panne
 
 ## Screen Reader [Screen Reader](https://github.com/AULEAT/Blockly-Blind-LowVision/blob/master/ScreenReader.html)
 
+[Watch Demo Video of Screen Reader](https://youtu.be/QuumG0n3K2M)
+
 This utilizes Aria Live Region to communicate same information as the Text to Speech solution using screenreader. This has been tested on Mac Voiceover, but not evaluated by a study with blind individuals yet. Make sure your screenreader is on. Use the following Keyboard commands to navigate the Blockly environment using Text to Speech
 
 * To enter the Toolbox, Press ‘T’. To navigate through categories and blocks in the toolbox, use keys ‘W’ and ‘S’ respectively.
@@ -34,6 +38,8 @@ This utilizes Aria Live Region to communicate same information as the Text to Sp
 * To get the text representation of a block, press CTRL + I. This also returns text representation of any respective nested children blocks.
 
 ## Speech to Text [Speech to Text](https://github.com/AULEAT/Blockly-Blind-LowVision/blob/master/SpeechToText.html)
+
+[Watch Demo Video of Speech to Text](https://youtu.be/cifI1w1Ggl8)
 
 This solution maps voice command to an individual keyboard command described in previous two solutions. Here is a list of the voice commands:
 
@@ -53,6 +59,8 @@ This solution maps voice command to an individual keyboard command described in 
 
 
 ## Speech to Text using NLP [Speech to Text using NLP](https://github.com/AULEAT/Blockly-Blind-LowVision/blob/master/nlp.html)
+
+[Watch Demo Video of Speech to Text using NLP](https://youtu.be/ikU6DQSMxGU)
 
 This is an improved solution which allows you to directly select toolbox categories or block elements. 
 
